@@ -22,7 +22,7 @@ def loadandcleandata(filepath="master_markbook.csv"):
 #Phase 2 + 3: Baseline AI + Mathematical Proof
 def runlevel1():
     X = df[["Maths_ Advanced"]]
-    Y = df["Software_Engineering_Final"]
+    y = df["Software_Engineering_Final"]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
