@@ -20,7 +20,40 @@ def loadandcleandata(filepath="master_markbook.csv"):
     print(df.head())
     return df
 #Phase 2 + 3: Baseline AI + Mathematical Proof
-run_level_1()
+def runlevel1():
+    X = df[["Maths_ Advanced"]]
+    Y = df["Software_Engineering_Final"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    model = MarkPredictor()
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+
+    mse = mean_squared_error(y_test, predictions)
+    r2  = r2_score(y_test, predictions)
+    print(f"\n── Phase 2: Baseline AI ──")
+    print(f"MSE: {mse:.2f}  |  R²: {r2:.4f}")
+
+    w = model.coef_[0]
+    b = model.intercept_
+    print(f"\n── Phase 3: Mathematical Proof ──")
+    print(f"Equation: y = {w:.4f}x + {b:.4f}")
+
+    x_line = np.linspace(X["Maths_Advanced"].min(), X["Maths_Advanced"].max(), 100)
+    y_line = w * x_line + b
+
+    plt.figure(figsize=(8, 5))
+    plt.scatter(X_test, y_test, color="steelblue", label="Actual", alpha=0.7)
+    plt.plot(x_line, y_line, color="tomato", linewidth=2, label=f"y = {w:.2f}x + {b:.2f}")
+    plt.xlabel("Maths Advanced")
+    plt.ylabel("Software Engineering Final")
+    plt.title("Phase 3 – Linear Regression Fit")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+    return model
 #Phase:4
 MarkPredictor class
 #Phase:5
