@@ -7,11 +7,19 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
-#Phase:1
-load_and_clean_data()
-#Phase:2
-run_level_1()
-#Phase:3
+#Phase 1: Data Automation
+def loadandcleandata(filepath="master_markbook.csv"):
+    df = pd.read_csv(filepath)
+    df.dropna(inplace=True)
+    score_columns = [c for c in df.columns if c not in ("Student", "Gender", "Attendance")]
+    for col in score_columns:
+        df = df[(df[col] >= 0) & (df[col] <= 100)]
+    
+    df.reset_index(drop=True, inplace=True)
+    print(f"Cleaned dataset: {df.shape[0]} rows, {df.shape[1]} columns")
+    print(df.head())
+    return df
+#Phase 2 + 3: Baseline AI + Mathematical Proof
 run_level_1()
 #Phase:4
 MarkPredictor class
