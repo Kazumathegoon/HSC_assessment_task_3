@@ -22,16 +22,16 @@ def loadandcleandata(filepath="master_markbook.csv"):
 #Phase 2 + 3: Baseline AI + Mathematical Proof
 def runlevel1():
     X = df[["Maths_ Advanced"]]
-    y = df["Software_Engineering_Final"]
+    Y = df["Software_Engineering_Final"]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 
     model = MarkPredictor()
-    model.fit(X_train, y_train)
+    model.fit(X_train, Y_train)
     predictions = model.predict(X_test)
 
-    mse = mean_squared_error(y_test, predictions)
-    r2  = r2_score(y_test, predictions)
+    mse = mean_squared_error(Y_test, predictions)
+    r2  = r2_score(Y_test, predictions)
     print(f"\n── Phase 2: Baseline AI ──")
     print(f"MSE: {mse:.2f}  |  R²: {r2:.4f}")
 
@@ -44,7 +44,7 @@ def runlevel1():
     y_line = w * x_line + b
 
     plt.figure(figsize=(8, 5))
-    plt.scatter(X_test, y_test, color="steelblue", label="Actual", alpha=0.7)
+    plt.scatter(X_test, Y_test, color="steelblue", label="Actual", alpha=0.7)
     plt.plot(x_line, y_line, color="tomato", linewidth=2, label=f"y = {w:.2f}x + {b:.2f}")
     plt.xlabel("Maths Advanced")
     plt.ylabel("Software Engineering Final")
@@ -54,10 +54,25 @@ def runlevel1():
     plt.show()
 
     return model
+
 #Phase:4
-MarkPredictor class
+class MarkPredictor:
+    def __init__(self):
+        self.model = LinearRegression()
+    def fit(self, X_train, y_train):
+        self.model.fit(X_train, y_train)
+    def predict(self, X_input):
+        return self.model.predict(X_input)
+    @property
+    def coef_(self):
+        return self._model.coef_
+    @property
+    def intercept_(self):
+        return self._model.intercept_
+
 #Phase:5
-run_level_2()
+
+
 #Phase:6
 bias_audit()
 #Phase:7
