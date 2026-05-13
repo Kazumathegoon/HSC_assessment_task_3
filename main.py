@@ -19,8 +19,9 @@ def loadandcleandata(filepath="master_markbook.csv"):
     print(f"Cleaned dataset: {df.shape[0]} rows, {df.shape[1]} columns")
     print(df.head())
     return df
+
 #Phase 2 + 3: Baseline AI + Mathematical Proof
-def runlevel1():
+def runlevel1(df):
     X = df[["Maths_ Advanced"]]
     Y = df["Software_Engineering_Final"]
 
@@ -71,13 +72,20 @@ class MarkPredictor:
         return self._model.intercept_
 
 #Phase:5
-
+def run_level_2(df):
+    X = df[["Maths_Advanced", "Physics"]]
+    Y = df["Software_Engineering_Final"]
+    
 
 #Phase:6
-bias_audit()
+def bias_audit(df):
+
 #Phase:7
-cross_validate()
+def cross_validate(df):
+
 #Phase:8
-predict_alex()
+def predict_alex(df):
+
 #Phase:extension(band 6)
-neural_network_comparison()
+def neural_network_comparison(df):
+    
