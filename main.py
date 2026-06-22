@@ -143,7 +143,18 @@ def cross_validate(df, k=5):
     print(f"Mean R²: {np.mean(scores):.4f}  |  Std: {np.std(scores):.4f}")
 
 #Phase:8
-def predict_alex(df):
+def predict_alex(model, scaler, student_data, attendance_rate):
+    """student_data: dict with keys Maths_Advanced, Physics"""
+    print(f"\n── Phase 8: Predict for student ──")
+    if attendance_rate < 0.50:
+        print("Prediction blocked — attendance below 50%")
+        return None
+
+    X = np.array([[student_data["Maths_Advanced"], student_data["Physics"]]])
+    X_scaled = scaler.transform(X)
+    prediction = model.predict(X_scaled)[0]
+    print(f"Predicted Software Engineering Final: {prediction:.2f}")
+    return prediction
 
 #Phase:extension(band 6)
 def neural_network_comparison(df):
