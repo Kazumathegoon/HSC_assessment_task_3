@@ -118,7 +118,29 @@ def bias_audit(df, model, scaler, group_column="Gender"):
         print("Result: No significant bias detected")
 
 #Phase:7
-def cross_validate(df):
+def cross_validate(df, k=5):
+    X = df[["Maths_Advanced", "Physics"]].values
+    y = df["Software_Engineering_Final"].values
+
+    kf = KFold(n_splits=k, shuffle=True, random_state=42)
+    scores = []
+
+    for fold, (train_idx, val_idx) in enumerate(kf.split(X), start=1):
+        X_train, X_val = X[train_idx], X[val_idx]
+        y_train, y_val = y[train_idx], y[val_idx]
+
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_val_scaled   = scaler.transform(X_val)
+
+        model = MarkPredictor()
+        model.fit(X_train_scaled, y_train)
+        r2 = r2_score(y_val, model.predict(X_val_scaled))
+        scores.append(r2)
+        print(f"  Fold {fold}: R² = {r2:.4f}")
+
+    print(f"\n── Phase 7: K-Fold Cross-Validation (k={k}) ──")
+    print(f"Mean R²: {np.mean(scores):.4f}  |  Std: {np.std(scores):.4f}")
 
 #Phase:8
 def predict_alex(df):
