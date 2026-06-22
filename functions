@@ -1,16 +1,1 @@
-#MarkPredictor class definition
-
-class MarkPredictor:
-    def __init__(self):
-        self.model = LinearRegression()
-    def fit(self, X_train, y_train):
-        self.model.fit(X_train, y_train)
-    def predict(self, X_input):
-        return self.model.predict(X_input)
-    @property
-    def coef_(self):
-        return self._model.coef_
-    @property
-    def intercept_(self):
-        return self._model.intercept_
-    
+ 

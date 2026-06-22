@@ -3,9 +3,24 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
+
+#Phase:4
+class MarkPredictor:
+    def __init__(self):
+        self.model = LinearRegression()
+    def fit(self, X_train, y_train):
+        self.model.fit(X_train, y_train)
+    def predict(self, X_input):
+        return self.model.predict(X_input)
+    @property
+    def coef_(self):
+        return self._model.coef_
+    @property
+    def intercept_(self):
+        return self._model.intercept_
 
 #Phase 1: Data Automation
 def loadandcleandata(filepath="master_markbook.csv"):
@@ -56,29 +71,51 @@ def runlevel1(df):
 
     return model
 
-#Phase:4
-class MarkPredictor:
-    def __init__(self):
-        self.model = LinearRegression()
-    def fit(self, X_train, y_train):
-        self.model.fit(X_train, y_train)
-    def predict(self, X_input):
-        return self.model.predict(X_input)
-    @property
-    def coef_(self):
-        return self._model.coef_
-    @property
-    def intercept_(self):
-        return self._model.intercept_
-
 #Phase:5
 def run_level_2(df):
     X = df[["Maths_Advanced", "Physics"]]
-    Y = df["Software_Engineering_Final"]
-    
+    y = df["Software_Engineering_Final"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled  = scaler.transform(X_test)
+
+    model = MarkPredictor()
+    model.fit(X_train_scaled, y_train)
+    predictions = model.predict(X_test_scaled)
+
+    mse = mean_squared_error(y_test, predictions)
+    r2  = r2_score(y_test, predictions)
+    print(f"\n── Phase 5: Multi-Subject AI ──")
+    print(f"MSE: {mse:.2f}  |  R²: {r2:.4f}")
+
+    return model, scaler
 
 #Phase:6
-def bias_audit(df):
+def bias_audit(df, model, scaler, group_column="Gender"):
+    print(f"\n── Phase 6: Ethics Audit (80% Rule) on '{group_column}' ──")
+
+    X = df[["Maths_Advanced", "Physics"]]
+    X_scaled = scaler.transform(X)
+    df = df.copy()
+    df["Predicted"] = model.predict(X_scaled)
+
+    groups = df[group_column].unique()
+    averages = {g: df[df[group_column] == g]["Predicted"].mean() for g in groups}
+
+    for g, avg in averages.items():
+        print(f"  {g}: mean predicted = {avg:.2f}")
+
+    sorted_avgs = sorted(averages.values())
+    ratio = sorted_avgs[0] / sorted_avgs[1] if sorted_avgs[1] != 0 else 0
+    print(f"Disparate impact ratio: {ratio:.4f}")
+
+    if ratio < 0.80:
+        print("Result: BIAS DETECTED — fails the 80% rule")
+    else:
+        print("Result: No significant bias detected")
 
 #Phase:7
 def cross_validate(df):
@@ -88,4 +125,3 @@ def predict_alex(df):
 
 #Phase:extension(band 6)
 def neural_network_comparison(df):
-    
