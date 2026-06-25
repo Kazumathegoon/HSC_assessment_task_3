@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
 #phase 1
-df_raw = pd.read_csv('Master_Markbook.csv', encoding="latin-1")
+df_raw = pd.read_csv('Master Markbook.csv', encoding="latin-1")
 alex_row = df_raw[df_raw['Student_Name'] == 'Alex Anderson'].copy()
 
 df_clean = df_raw.dropna()
@@ -44,6 +44,7 @@ plt.ylabel('Software Engineering Final')
 plt.title('Level 1 AI: Maths Advanced vs Software Engineering Final')
 plt.legend()
 plt.tight_layout()
+plt.savefig('line_of_best_fit.png', dpi=150)
 plt.show()
 
 #phase 4
