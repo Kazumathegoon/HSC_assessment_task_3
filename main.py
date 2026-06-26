@@ -17,7 +17,7 @@ df_clean = df_clean[
     df_clean['Software_Engineering_Final'].between(0, 100)
 ]
 print(f"Phase 1: cleaned dataset has {len(df_clean)} valid rows (started with {len(df_raw)})")
-
+print(len(df_clean))
 #phase 2
 X1, y1 = df_clean[['Maths_Advanced']], df_clean['Software_Engineering_Final']
 X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2)
